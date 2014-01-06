@@ -44,14 +44,14 @@ public class SolverTest {
   public void testObstacles() {
     // @formatter:off
     String mazeString = 
-      "#######\n" +
-      "#     #\n" +
-      "#  # G#\n" +
-      "# S # #\n" +
-      "#######\n";
+      "######\n" +
+      "#    #\n" +
+      "# # G#\n" +
+      "#S # #\n" +
+      "######\n";
     // @formatter:on
-    Set<Square> obstacles = Sets.newHashSet(new Square(1, 2), new Square(2, 3));
-    Maze maze = new Maze(3, 5, new Square(2, 1), new Square(1, 4), obstacles);
+    Set<Square> obstacles = Sets.newHashSet(new Square(1, 1), new Square(2, 2));
+    Maze maze = new Maze(3, 4, new Square(2, 0), new Square(1, 3), obstacles);
     Assert.assertEquals(mazeString, maze.toString());
 
     // solve the maze
@@ -61,16 +61,16 @@ public class SolverTest {
     List<Square> path = solver.getPathFromStartToGoal();
     List<Square> expectedPath =
         Lists.newArrayList(
-            new Square(1, 1),
+            new Square(1, 0),
+            new Square(0, 0),
             new Square(0, 1),
             new Square(0, 2),
-            new Square(0, 3),
-            new Square(0, 4));
+            new Square(0, 3));
     Assert.assertEquals(expectedPath, path);
 
     // the square to the right of the start should also be explored
     Set<Square> explored = solver.getExploredSquares();
-    Set<Square> expectedExplored = Sets.newHashSet(new Square(2, 2));
+    Set<Square> expectedExplored = Sets.newHashSet(new Square(2, 1));
     expectedExplored.addAll(path);
     Assert.assertEquals(expectedExplored, explored);
   }
