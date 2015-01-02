@@ -12,7 +12,7 @@ import com.google.common.collect.Sets;
 
 public class SolverTest {
 
-  @Test
+  @Test(timeout = 10000)
   public void testNoObstacles() {
     // @formatter:off
     String mazeString = 
@@ -30,17 +30,18 @@ public class SolverTest {
     // the solution should just go left to right
     List<Square> path = solver.getPathFromStartToGoal();
     List<Square> expectedPath = new ArrayList<>();
-    for (int column = 1; column < 12; ++column) {
+    for (int column = 0; column <= 12; ++column) {
       expectedPath.add(new Square(0, column));
     }
     Assert.assertEquals(expectedPath, path);
 
     // no additional squares should be explored
     Set<Square> explored = solver.getExploredSquares();
-    Assert.assertEquals(Sets.newHashSet(expectedPath), explored);
+    Set<Square> expectedExplored = Sets.newHashSet(expectedPath);
+    Assert.assertEquals(expectedExplored, explored);
   }
 
-  @Test
+  @Test(timeout = 10000)
   public void testObstacles() {
     // @formatter:off
     String mazeString = 
@@ -59,19 +60,20 @@ public class SolverTest {
 
     // the solution should go up around the obstacles
     List<Square> path = solver.getPathFromStartToGoal();
-    List<Square> expectedPath =
-        Lists.newArrayList(
+    List<Square> expectedPath = Lists.newArrayList(
+            new Square(2, 0),
             new Square(1, 0),
             new Square(0, 0),
             new Square(0, 1),
             new Square(0, 2),
-            new Square(0, 3));
+            new Square(0, 3),
+            new Square(1, 3));
     Assert.assertEquals(expectedPath, path);
 
     // the square to the right of the start should also be explored
     Set<Square> explored = solver.getExploredSquares();
     Set<Square> expectedExplored = Sets.newHashSet(new Square(2, 1));
-    expectedExplored.addAll(path);
+    expectedExplored.addAll(expectedPath);
     Assert.assertEquals(expectedExplored, explored);
   }
 }
