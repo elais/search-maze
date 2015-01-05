@@ -12,7 +12,7 @@ The goal of this assignment is to give you some experience applying the A* searc
 
 1.  Compile the code. Run the following command:
 
-        mvn compile
+        mvn clean compile
 
     Everything should compile and you should see a message like:
 
@@ -22,7 +22,7 @@ The goal of this assignment is to give you some experience applying the A* searc
 
 2.  Test the code. Run the following command:
 
-        mvn test
+        mvn clean test
 
     The tests should fail, and you should see a message like:
 
@@ -36,9 +36,11 @@ The goal of this assignment is to give you some experience applying the A* searc
         [INFO] BUILD FAILURE
         [INFO] ------------------------------------------------------------------------
 
+    Note the `clean`, which ensures that Maven alone (not your development environment) is compiling your code.
+
 ## Implement your part of the code
 
-Your task is to implement the constructor of `edu.uab.cis.search.maze.Solver`, filling in the `explored` and `path` fields as appropriate. **Do not modify any other classes.** You should implement this using A* search with an L1 heuristic. Specifically, squares should be explored with the following strategy:
+Your task is to implement the constructor of `edu.uab.cis.search.maze.Solver`, filling in the `explored` and `path` fields as appropriate. **Do not modify any other files.** You should implement this using A* search with an L1 heuristic. Specifically, squares should be explored with the following strategy:
 
 * Squares are ordered for exploration using the score `f(x) = g(x) + h(x)`, with the smallest `f(x)` squares being explored first
 * `g(x)` is the length of the path so far, from the start square to the current square, including the steps necessary to avoid obstacles
@@ -51,8 +53,7 @@ Your task is to implement the constructor of `edu.uab.cis.search.maze.Solver`, f
 
 1.  Re-run the tests:
 
-        mvn clean
-        mvn test
+        mvn clean test
 
     You should now see a message like:
 
