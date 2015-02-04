@@ -2,6 +2,16 @@ package edu.uab.cis.search.maze;
 
 import java.util.List;
 import java.util.Set;
+import java.util.PriorityQueue;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Solves a maze using A* search with an L1 heuristic.
@@ -36,6 +46,32 @@ public class Solver {
    */
   public Solver(Maze maze) {
     // TODO
+    PriorityQueue open_list = new PriorityQueue<Square>();
+    open_list.add(maze.getStart());
+    Map<Square, Integer> g_score = new HashMap<Square, Integer>();
+    Map<Square, Integer> f_score = new HashMap<Square, Integer>();
+    g_score.put(maze.getStart(), 0);
+    f_score.put(maze.getStart(), g_score.get(maze.getStart()) + 
+            this.distance(maze.getStart(), maze.getGoal()));
+    
+    
+    
+    while(!open_list.isEmpty()){
+         Square current = f_score.entrySet().stream().min(
+                 Map.Entry.comparingByValue(Integer::compareTo)).get().getKey();
+         if(current == maze.getGoal()){
+             
+         }
+         
+         open_list.remove(current);
+         explored.add(current);
+         for(int i = 1; i < 5; i++){
+             if( i == 1){
+          
+             }
+         }
+        
+    }
   }
 
   /**
@@ -53,6 +89,11 @@ public class Solver {
    */
   public Set<Square> getExploredSquares() {
     return this.explored;
+  }
+  
+  public int distance(Square s1, Square s2){
+      return Math.abs(s1.getColumn() - s2.getColumn()) + 
+              Math.abs(s1.getRow() - s2.getRow());
   }
 
 }
