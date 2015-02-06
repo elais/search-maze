@@ -1,5 +1,6 @@
 package edu.uab.cis.search.maze;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.PriorityQueue;
@@ -8,8 +9,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Queue;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,14 +50,10 @@ public class Solver {
    */
   public Solver(Maze maze) {
     // TODO
-    PriorityQueue open_list = new PriorityQueue<Square>();
-    open_list.add(maze.getStart());
-    Map<Square, Integer> g_score = new HashMap<Square, Integer>();
-    Map<Square, Integer> f_score = new HashMap<Square, Integer>();
-    g_score.put(maze.getStart(), 0);
-    f_score.put(maze.getStart(), g_score.get(maze.getStart()) + 
-            this.distance(maze.getStart(), maze.getGoal()));
-    
+    this.explored = new HashSet<Square>();
+    Queue<Node> open_list = new PriorityQueue<>(11, nodeComparator);
+    this.path = new ArrayList<Square>();
+    Node start = new Node(maze.getStart(), 0)
     
     
     while(!open_list.isEmpty()){
@@ -72,6 +72,8 @@ public class Solver {
          }
         
     }
+    
+    //Comparator anonymous class implementation
   }
 
   /**
@@ -95,5 +97,48 @@ public class Solver {
       return Math.abs(s1.getColumn() - s2.getColumn()) + 
               Math.abs(s1.getRow() - s2.getRow());
   }
+  
+  public static Comparator<Node> nodeComparator = new Comparator<Node>(){
+      @Override
+      public int compare (Node n1, Node n2){
+          return (int);
+      }
+  };
+
+}
+
+final class Node<Square>{
+    
+    private final Square node;
+    private int g;
+    private int h;
+    private int f;
+    
+    public Node (Square node, Map<Square, Integer> heuristic){
+        this.node = node;
+        this.g = Integer.MAX_VALUE;
+        this.heuristic = heuristic;
+    }
+    
+    public Square getNode(){
+        return node;
+    }
+    
+    public int getG(){
+        return g;
+    }
+    
+    public void setG(int g){
+        this.g = g;
+    }
+    
+    
+    public int getH(){
+        return h;
+    }
+    
+    public int getF(){
+        return f;
+    }
 
 }
