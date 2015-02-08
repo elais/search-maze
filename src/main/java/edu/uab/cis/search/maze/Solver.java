@@ -117,13 +117,13 @@ public class Solver {
           if(n1.getF() != n2.getF()){
               return n1.getF() - n2.getF();
           }
-          else if(n1.getF() == n2.getF()){
+          else if((n1.getF() == n2.getF()) && (n1.getH() != n2.getH())){
               return n1.getH() - n2.getH();
           }
-          else if(n1.getH() == n2.getH()){
+          else if((n1.getH() == n2.getH()) && (n1.getNode().getColumn() != n2.getNode().getColumn())){
               return n1.getNode().getColumn() - n2.getNode().getColumn();
           }
-          else if(n1.getNode().getColumn() == n2.getNode().getColumn()){
+          else if((n1.getNode().getColumn() == n2.getNode().getColumn()) && (n1.getNode().getRow() != n2.getNode().getRow())){
               return n1.getNode().getRow() - n2.getNode().getRow();
           }
           else{ return 0; }
