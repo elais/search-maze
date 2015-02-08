@@ -50,33 +50,57 @@ public class Solver {
    */
   public Solver(Maze maze) {
     // TODO
-    this.explored = new TreeSet<Square>();
-    Queue<Node> open_list = new PriorityQueue<>(11, nodeComparator);
+    this.explored = new HashSet<Square>();
+    Queue<Node> open_list = new PriorityQueue<>(10, nodeComparator);
     this.path = new ArrayList<Square>();
-    Node start = new Node(maze.getStart(), this.distance(maze.getStart(),
-            maze.getGoal()));
+    Node start = new Node(maze.getStart(), distance(maze.getStart(), maze.getGoal()));
     start.setG(0);
     open_list.add(start);
     
     
     while(!open_list.isEmpty()){
-         Node current = open_list.poll();
-         if(current.getNode() == maze.getGoal()){
-             this.path.add(current.getNode());
+         Node current = open_list.peek();
+         
+
+         if(current.getNode().equals(maze.getGoal())){
+             explored.add(current.getNode());
+             this.path.addAll(reconstructPath(current));
+             System.out.println(explored);
              break;
          }
-         
-         open_list.remove(current);
-         explored.add(current.getNode());
-        ArrayList<Square> neighbors = this.getNeighbors(current);
-         for(Square s : neighbors){
-             if(maze.isBlocked(s) || explored.contains(s)){
-                 continue;
-             }
-         }
-    }
-    
+        ArrayList<Square> neighbors = getNeighbors(current);
+        open_list.remove(current);
+        explored.add(current.getNode());
+        for(Square s : neighbors){
+            if(explored.contains(s) || maze.isBlocked(s)){
+                continue;
+            }
+            Node n = new Node(s,this.distance(s, maze.getGoal()) );             
+            int tentativeGScore = current.getG() + 
+                    distance(current.getNode(),n.getNode());
+
+            if((!open_list.contains(n)) || (tentativeGScore < n.getG())){
+                n.setParent(current);
+                n.setG(tentativeGScore);
+                if(!open_list.contains(n)){
+                    open_list.add(n);
+                }
+            }
+        }
+    }   
     //Comparator anonymous class implementation
+  }
+  
+  public static List<Square> reconstructPath(Node n){
+      List<Square> path = new ArrayList<>(); 
+      Node current = n;
+      
+      while(current != null){
+          path.add(current.getNode());
+          current = current.getParent();
+      }
+      Collections.reverse(path);
+      return path;
   }
 
   /**
@@ -86,6 +110,26 @@ public class Solver {
   public List<Square> getPathFromStartToGoal() {
     return this.path;
   }
+  
+  public static Comparator<Node> nodeComparator = new Comparator<Node>(){
+      @Override
+      public int compare (Node n1, Node n2){
+          if(n1.getF() != n2.getF()){
+              return n1.getF() - n2.getF();
+          }
+          else if(n1.getF() == n2.getF()){
+              return n1.getH() - n2.getH();
+          }
+          else if(n1.getH() == n2.getH()){
+              return n1.getNode().getColumn() - n2.getNode().getColumn();
+          }
+          else if(n1.getNode().getColumn() == n2.getNode().getColumn()){
+              return n1.getNode().getRow() - n2.getNode().getRow();
+          }
+          else{ return 0; }
+      }
+  };
+  
 
   /**
    * @return All squares that were explored during the search process. This is
@@ -111,33 +155,13 @@ public class Solver {
               1,n.getNode().getColumn() + 0);
       Square s4 = new Square(n.getNode().getRow() - 
               1,n.getNode().getColumn() + 0);
-      Square s5 = new Square(n.getNode().getRow() + 
-              1,n.getNode().getColumn() + 1);
-      Square s6 = new Square(n.getNode().getRow() + 
-              1,n.getNode().getColumn() - 1);
-      Square s7 = new Square(n.getNode().getRow() - 
-              1,n.getNode().getColumn() + 1);
-      Square s8 = new Square(n.getNode().getRow() - 
-              1,n.getNode().getColumn() - 1);
-      
+    
       neighbors.add(s1);
       neighbors.add(s2);
       neighbors.add(s3);
       neighbors.add(s4);
-      neighbors.add(s5);
-      neighbors.add(s6);
-      neighbors.add(s7);
-      neighbors.add(s8);
       return neighbors;
   }
-  
-  
-  public static Comparator<Node> nodeComparator = new Comparator<Node>(){
-      @Override
-      public int compare (Node n1, Node n2){
-          return n1.getF() - n2.getF();
-      }
-  };
 
 }
 
@@ -147,6 +171,7 @@ final class Node{
     private int g;
     private int h;
     private int f;
+    private Node parent;
     
     public Node(Square node, int distanceToGoal){
         this.node = node;
@@ -172,10 +197,17 @@ final class Node{
     public int getH(){
         return h;
     }
-
     
     public int getF(){
         return f;
+    }
+    
+    public Node getParent(){
+        return parent;
+    }
+    
+    public void setParent(Node parent){
+        this.parent = parent;
     }
 
 }
