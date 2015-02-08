@@ -76,4 +76,43 @@ public class SolverTest {
     expectedExplored.addAll(expectedPath);
     Assert.assertEquals(expectedExplored, explored);
   }
+    @Test(timeout = 10000)
+    public void testObstacles2() {
+        // @formatter:off
+        String mazeString = 
+          "############\n" +
+          "#          #\n" +
+          "# #####  G #\n" +
+          "#   S ######\n" +
+          "#          #\n" +
+          "############\n";
+        // @formatter:on
+        Set<Square> obstacles = Sets.newHashSet(new Square(1, 1), new Square(1, 2), new Square(1, 3),new Square(1, 4), new Square(1, 5),new Square(2, 5), new Square(2, 6), new Square(2, 7), new Square(2, 8), new Square(2, 9));
+        Maze maze = new Maze(4, 10, new Square(2, 3), new Square(1, 8), obstacles);
+        System.out.println(maze.toString());
+        Assert.assertEquals(mazeString, maze.toString());
+
+        // solve the maze
+        Solver solver = new Solver(maze);
+
+        // the solution should go up around the obstacles
+        List<Square> path = solver.getPathFromStartToGoal();
+        List<Square> expectedPath = Lists.newArrayList(
+                new Square(2, 3),
+                new Square(2, 2),
+                new Square(2, 1),
+                new Square(2, 0),
+                new Square(1, 0),
+                new Square(0, 0),
+                new Square(0, 1),
+                new Square(0, 2),
+                new Square(0, 3),
+                new Square(0, 4),
+                new Square(0, 5),
+                new Square(0, 6),
+                new Square(0, 7),
+                new Square(0, 8),
+                new Square(1, 8));
+        Assert.assertEquals(expectedPath, path);
+    }
 }

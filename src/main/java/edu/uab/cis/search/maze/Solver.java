@@ -1,5 +1,6 @@
 package edu.uab.cis.search.maze;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -65,7 +66,6 @@ public class Solver {
          if(current.getNode().equals(maze.getGoal())){
              explored.add(current.getNode());
              this.path.addAll(reconstructPath(current));
-             System.out.println(explored);
              break;
          }
         ArrayList<Square> neighbors = getNeighbors(current);
@@ -114,19 +114,23 @@ public class Solver {
   public static Comparator<Node> nodeComparator = new Comparator<Node>(){
       @Override
       public int compare (Node n1, Node n2){
-          if(n1.getF() != n2.getF()){
+          if(n1.getF() == n2.getF()){
+              if(n1.getH() == n2.getH()){
+                  if(n1.getNode().getRow() == n2.getNode().getRow()){
+                      if(n1.getNode().getColumn() == n2.getNode().getColumn()){
+                          return 0;
+                      } else{
+                          return n1.getNode().getColumn() - n2.getNode().getColumn();
+                      }
+                  } else{
+                      return n1.getNode().getRow() - n2.getNode().getRow();
+                  }
+              } else{
+                  return n1.getH() - n2.getH();
+              }
+          } else{
               return n1.getF() - n2.getF();
           }
-          else if((n1.getF() == n2.getF()) && (n1.getH() != n2.getH())){
-              return n1.getH() - n2.getH();
-          }
-          else if((n1.getH() == n2.getH()) && (n1.getNode().getColumn() != n2.getNode().getColumn())){
-              return n1.getNode().getColumn() - n2.getNode().getColumn();
-          }
-          else if((n1.getNode().getColumn() == n2.getNode().getColumn()) && (n1.getNode().getRow() != n2.getNode().getRow())){
-              return n1.getNode().getRow() - n2.getNode().getRow();
-          }
-          else{ return 0; }
       }
   };
   
@@ -146,20 +150,11 @@ public class Solver {
   }
   
   public ArrayList<Square> getNeighbors(Node n){
-      ArrayList<Square> neighbors = new ArrayList<>();
-      Square s1 = new Square(n.getNode().getRow() + 
-              0,n.getNode().getColumn() + 1);
-      Square s2 = new Square(n.getNode().getRow() + 
-              0,n.getNode().getColumn() - 1);
-      Square s3 = new Square(n.getNode().getRow() + 
-              1,n.getNode().getColumn() + 0);
-      Square s4 = new Square(n.getNode().getRow() - 
-              1,n.getNode().getColumn() + 0);
-    
-      neighbors.add(s1);
-      neighbors.add(s2);
-      neighbors.add(s3);
-      neighbors.add(s4);
+      ArrayList<Square> neighbors = Lists.newArrayList(
+              new Square(n.getNode().getRow(),n.getNode().getColumn() + 1),
+              new Square(n.getNode().getRow(),n.getNode().getColumn() - 1),
+              new Square(n.getNode().getRow() + 1,n.getNode().getColumn()),
+              new Square(n.getNode().getRow() - 1,n.getNode().getColumn()));
       return neighbors;
   }
 
