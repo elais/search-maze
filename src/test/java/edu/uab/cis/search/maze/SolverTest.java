@@ -87,7 +87,17 @@ public class SolverTest {
           "#          #\n" +
           "############\n";
         // @formatter:on
-        Set<Square> obstacles = Sets.newHashSet(new Square(1, 1), new Square(1, 2), new Square(1, 3),new Square(1, 4), new Square(1, 5),new Square(2, 5), new Square(2, 6), new Square(2, 7), new Square(2, 8), new Square(2, 9));
+        Set<Square> obstacles = Sets.newHashSet(
+                new Square(1, 1), 
+                new Square(1, 2), 
+                new Square(1, 3),
+                new Square(1, 4), 
+                new Square(1, 5),
+                new Square(2, 5), 
+                new Square(2, 6), 
+                new Square(2, 7), 
+                new Square(2, 8), 
+                new Square(2, 9));
         Maze maze = new Maze(4, 10, new Square(2, 3), new Square(1, 8), obstacles);
         System.out.println(maze.toString());
         Assert.assertEquals(mazeString, maze.toString());
@@ -114,5 +124,21 @@ public class SolverTest {
                 new Square(0, 8),
                 new Square(1, 8));
         Assert.assertEquals(expectedPath, path);
+    }
+    
+    @Test(timeout=10000)
+    public void testConditions(){
+        String mazeString = 
+                "####\n" +
+                "#S #\n" +
+                "# G#\n" +
+                "####\n";
+        Maze maze = new Maze(2,2, new Square(0,0), new Square(1,1), Sets.<Square> newHashSet());
+        Assert.assertEquals(mazeString, maze.toString());
+        
+        // solve the maze
+        Solver solver = new Solver(maze);
+        
+        // the solution is to test whether conditionals are correct
     }
 }

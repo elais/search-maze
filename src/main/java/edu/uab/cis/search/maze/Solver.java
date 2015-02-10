@@ -50,9 +50,10 @@ public class Solver {
    *          The maze to be solved.
    */
   public Solver(Maze maze) {
-    // TODO
+    // Adapted from pseudocode found at 
+    //  https://en.wikipedia.org/wiki/A*_search_algorithm#Pseudocode
     this.explored = new HashSet<Square>();
-    Queue<Node> open_list = new PriorityQueue<>(10, nodeComparator);
+    Queue<Node> open_list = new PriorityQueue<>(20, nodeComparator);
     this.path = new ArrayList<Square>();
     Node start = new Node(maze.getStart(), distance(maze.getStart(), maze.getGoal()));
     start.setG(0);
