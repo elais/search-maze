@@ -50,7 +50,7 @@ public class Solver {
    *          The maze to be solved.
    */
   public Solver(Maze maze) {
-    // Adapted from pseudocode found at 
+    // With help from description found at 
     //  https://en.wikipedia.org/wiki/A*_search_algorithm#Pseudocode
     this.explored = new HashSet<Square>();
     Queue<Node> open_list = new PriorityQueue<>(20, nodeComparator);
@@ -61,14 +61,13 @@ public class Solver {
     
     
     while(!open_list.isEmpty()){
-         Node current = open_list.peek();
+        Node current = open_list.peek();
          
-
-         if(current.getNode().equals(maze.getGoal())){
-             explored.add(current.getNode());
-             this.path.addAll(reconstructPath(current));
-             break;
-         }
+        if(current.getNode().equals(maze.getGoal())){
+            explored.add(current.getNode());
+            this.path.addAll(reconstructPath(current));
+            break;
+        }
         ArrayList<Square> neighbors = getNeighbors(current);
         open_list.remove(current);
         explored.add(current.getNode());
